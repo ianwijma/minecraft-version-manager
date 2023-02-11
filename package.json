@@ -1,7 +1,7 @@
 {
   "name": "minecraft-version-manager",
   "version": "0.0.1",
-  "description": "minecraft-version-manager CLI",
+  "description": "Minecraft Version Manager - The easiest way to creating and manage Minecraft modpacks, client and servers",
   "private": true,
   "types": "build/types/types.d.ts",
   "bin": {
