@@ -1,6 +1,7 @@
-import { AbstractCommand, AbstractCommandArguments, PackageJson } from "@mvm/common";
+import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
+import { PackageJson } from "@mvm/common";
 
-export interface MvmCommandArguments extends AbstractCommandArguments{
+export interface MvmCommandArguments extends AbstractCommandArguments {
   version: boolean
 }
 

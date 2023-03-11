@@ -1,4 +1,4 @@
-import { AbstractCommand, AbstractCommandArguments } from "@mvm/common";
+import { AbstractCommand, AbstractCommandArguments } from "../AbstractCommand";
 
 export interface AddModCommandArguments extends AbstractCommandArguments {
 
