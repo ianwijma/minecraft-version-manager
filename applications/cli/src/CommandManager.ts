@@ -1,7 +1,7 @@
-import { AbstractCommand } from '@mvm/common'
 import MvmCommand from "./commands/MvmCommand";
 import InitCommand from "./commands/InitCommand";
 import AddModCommand from "./commands/mods/AddModCommand";
+import { AbstractCommand } from "./commands/AbstractCommand";
 
 const COMMAND_ROOT = '_'
 
