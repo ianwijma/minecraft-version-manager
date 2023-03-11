@@ -8,11 +8,13 @@ module.exports = {
   name: 'init',
   run: async (toolbox: GluegunToolbox) => {
     const { print: { info, error } } = toolbox;
-    const { filesystem: { cwd, path, isDirectory, exists } } = toolbox;
+    const { filesystem: { cwd, path, isDirectory, exists, dir } } = toolbox;
     const { parameters } = toolbox;
 
     const { first: target = '' } = parameters;
     const fullPath = path(cwd(), target);
+
+    if (target) dir(fullPath);
 
     if (!isDirectory(fullPath)) {
       error(`${fullPath} is not a directory`);
@@ -24,13 +26,17 @@ module.exports = {
       return;
     }
 
-    const mvmPackage = new MvmPackage();
+    const mvmPackage = new MvmPackage(fullPath);
     mvmPackage.name = basename(fullPath);
+    mvmPackage.defaultType = 'both';
+    mvmPackage.stability = 'release';
     mvmPackage.version = '1.0.0';
     mvmPackage.minecraftVersion = LATEST_MINECRAFT_RELEASE_VERSION;
     mvmPackage.modLoader = 'vanilla';
     mvmPackage.modLoaderVersion = LATEST_MINECRAFT_RELEASE_VERSION;
     mvmPackage.mods = {};
+    mvmPackage.serverMods = {};
+    mvmPackage.clientMods = {};
     mvmPackage.modProvider = 'directDownload';
     mvmPackage.files = 'config';
 

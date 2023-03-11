@@ -6,7 +6,7 @@ export default class ModDownload {
   private readonly _hash: string | null;
 
   constructor(name: ModName, version: string, hash: string | null = null) {
-    this._name = name
+    this._name = name.toLowerCase().replace(' ', '-');
     this._version = version
     this._hash = hash
   }

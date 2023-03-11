@@ -1,6 +1,6 @@
 import MvmPackage, { MvmPackageFileContent } from './MvmPackage'
 import { existsSync, lstatSync, readFileSync, writeFileSync } from 'fs'
-import { join } from 'path';
+import { join } from 'path'
 
 export const DEFAULT_PACKAGE_NAME = 'mvm-package.json';
 
@@ -14,13 +14,7 @@ export default class MvmPackageHandler {
 
   static loadMvmPackage(packagePath: string): MvmPackage {
     const mvmPackageContent = this.readMvmPackageContent(packagePath);
-    const mvmPackage = new MvmPackage(mvmPackageContent);
-    const mvmPackageErrors = mvmPackage.validate();
-
-    if (mvmPackageErrors.length > 0) {
-      throw new Error(`${DEFAULT_PACKAGE_NAME} has the following errors:\n${mvmPackageErrors.join('\n')}`);
-    }
-
+    const mvmPackage = new MvmPackage(packagePath, mvmPackageContent);
     return mvmPackage;
   }
 
