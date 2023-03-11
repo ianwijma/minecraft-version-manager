@@ -8,7 +8,15 @@
       "executor": "nx:run-commands",
       "dependsOn": ["build"],
       "options": {
-        "command": "pkg main.js --targets node18-linux,node18-alpine --output mvm",
+        "command": "pkg main.js --targets node18-linux,node18-alpine,node18-win,node18-macos --output mvm",
+        "cwd": "dist/applications/cli"
+      }
+    },
+    "package-linux": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "pkg main.js --targets node18-linux --output mvm",
         "cwd": "dist/applications/cli"
       }
     },
