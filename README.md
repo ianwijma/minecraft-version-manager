@@ -15,3 +15,7 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
+
+## MVM resources
+
+Good examples on how to compile for a platform: https://github.com/GTNewHorizons/DreamAssemblerXXL
