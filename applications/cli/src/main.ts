@@ -1,6 +1,6 @@
 import parser from 'yargs-parser';
 import * as process from 'process';
-import CommandManager from './CommandManager'
+import CommandManager from './utils/CommandManager'
 
 async function Main(): Promise<void> {
   const { _: commandPath = [], ...argv } = parser(process.argv.slice(2));
