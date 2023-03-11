@@ -1,0 +1,16 @@
+{
+  "name": "command-mod-add",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/command-mod-add/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/command-mod-add/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
