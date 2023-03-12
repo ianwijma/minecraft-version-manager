@@ -1,6 +1,6 @@
-import MvmCommand from "../commands/MvmCommand";
-import InitCommand from "../commands/InitCommand";
-import AddModCommand from "../commands/mods/AddModCommand";
+import { MvmCommand } from "../commands/MvmCommand";
+import { InitCommand } from "../commands/InitCommand";
+import { ModAddCommand } from "../commands/ModAddCommand";
 import { AbstractCommand } from "../commands/AbstractCommand";
 
 const COMMAND_ROOT = '_'
@@ -9,20 +9,24 @@ interface CommandStruct {
   [key: string]: AbstractCommand|CommandStruct
 }
 
-export default class CommandManager {
+export class CommandManager {
   private static commandStructure: CommandStruct = {
     [COMMAND_ROOT]: new MvmCommand(),
     init: new InitCommand(),
     mod: {
-      add: new AddModCommand()
+      add: new ModAddCommand()
     }
   }
 
-  static getCommand(commandPath: string[]): [AbstractCommand|null, string[]|null] {
+  static getCommands(): CommandStruct {
+    return this.commandStructure;
+  }
+
+  static getCommand(commandPath: string[]): [AbstractCommand|undefined, string[]|undefined]|[] {
     return this.searchCommand(commandPath, this.commandStructure);
   }
 
-  private static searchCommand(commandPath: string[], commandStructure: CommandStruct): [AbstractCommand|null, string[]|null] {
+  private static searchCommand(commandPath: string[], commandStructure: CommandStruct): [AbstractCommand|undefined, string[]|undefined]|[] {
     const [currentPath = COMMAND_ROOT, ...restPath] = commandPath;
 
     if (currentPath in commandStructure) {
@@ -32,7 +36,11 @@ export default class CommandManager {
         return [currentCommandOrStructure, restPath];
       }
 
-      return this.searchCommand(restPath, currentCommandOrStructure);
+      if (currentCommandOrStructure) {
+        return this.searchCommand(restPath, currentCommandOrStructure);
+      }
     }
+
+    return [];
   }
 }
