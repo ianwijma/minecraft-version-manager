@@ -2,16 +2,18 @@ import { MvmCommand } from "../commands/MvmCommand";
 import { InitCommand } from "../commands/InitCommand";
 import { ModAddCommand } from "../commands/ModAddCommand";
 import { AbstractCommand } from "../commands/AbstractCommand";
+import { HelpCommand } from "../commands/HelpCommand";
 
-const COMMAND_ROOT = '_'
+export const COMMAND_ROOT = '_'
 
-interface CommandStruct {
+export interface CommandStruct {
   [key: string]: AbstractCommand|CommandStruct
 }
 
 export class CommandManager {
   private static commandStructure: CommandStruct = {
     [COMMAND_ROOT]: new MvmCommand(),
+    help: new HelpCommand(),
     init: new InitCommand(),
     mod: {
       add: new ModAddCommand()

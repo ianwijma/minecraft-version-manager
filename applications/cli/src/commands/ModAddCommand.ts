@@ -8,4 +8,8 @@ export class ModAddCommand extends AbstractCommand<AddModCommandArguments> {
   handle(argv: AddModCommandArguments) {
     console.log(argv);
   }
+
+  getDescription(): string {
+    return 'Adds a mod'
+  }
 }

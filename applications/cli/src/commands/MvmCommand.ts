@@ -1,8 +1,10 @@
 import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
 import { PackageJson } from "@mvm/common";
+import { HelpText } from "../utils/HelpText";
 
 export interface MvmCommandArguments extends AbstractCommandArguments {
-  version: boolean
+  version: boolean,
+  help: boolean,
 }
 
 export class MvmCommand extends AbstractCommand<MvmCommandArguments> {
@@ -10,6 +12,12 @@ export class MvmCommand extends AbstractCommand<MvmCommandArguments> {
     if (argv.version) {
       console.log(`v${PackageJson.version}`)
     }
+    if (argv.help) {
+      console.log(HelpText.getText())
+    }
   }
 
+  getDescription(): string {
+    return '--help / --version';
+  }
 }
