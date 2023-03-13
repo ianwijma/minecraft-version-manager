@@ -29,6 +29,6 @@ export class InitCommand extends AbstractCommand<InitCommandArguments> {
   }
 
   getArguments(): string {
-    return '[target]';
+    return '<target>';
   }
 }

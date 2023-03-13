@@ -42,6 +42,6 @@ export class FileAddCommand extends AbstractCommand<FileAddCommandArguments> {
   }
 
   getArguments(): string {
-    return '[file/from] [?to]';
+    return '<file/from> ?<to>';
   }
 }
