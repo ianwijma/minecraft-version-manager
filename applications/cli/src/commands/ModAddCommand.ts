@@ -8,7 +8,9 @@ export interface AddModCommandArguments extends AbstractCommandArguments {
 
 export class ModAddCommand extends AbstractCommand<AddModCommandArguments> {
   handle(argv: AddModCommandArguments) {
-    console.log(argv);
+    const { _: [ modName ] } = argv;
+    const { version = 'latest', provider = null } = argv;
+    console.log(modName, version, provider);
   }
 
   getDescription(): string {
