@@ -15,6 +15,7 @@ export class HelpText {
         const commandArray = [Constants.COMMAND];
         if (path.length) commandArray.push(path.join(' ').trim());
         commandArray.push(commandKey === COMMAND_ROOT ? '' : commandKey);
+        commandArray.push(commandOrCommandStruct.getArguments())
 
         commandData.push([
           commandArray.join(' ').trim(),
