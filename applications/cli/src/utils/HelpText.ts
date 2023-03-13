@@ -47,9 +47,7 @@ ${this.getFooter()}`
     const commands = this.getCommands();
     return commands.reduce((content, command) => {
       const [commandString, commandDescription] = command;
-      const tabs = 6 - Math.floor(commandString.length / 8);
-
-      return content + `\t${commandString}${'\t'.repeat(tabs)}${commandDescription}\n`;
+      return content + `\t${commandString}\n\t\t${commandDescription}\n\n`;
     }, '').trimEnd()
   }
 
