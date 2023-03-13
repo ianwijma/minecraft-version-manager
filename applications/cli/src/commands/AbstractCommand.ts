@@ -3,7 +3,7 @@ export interface AbstractCommandArguments {
 }
 
 export abstract class AbstractCommand<Arguments extends AbstractCommandArguments = AbstractCommandArguments> {
-  abstract handle(argv: Arguments);
+  abstract handle(argv: Arguments): Promise<void>|void;
 
   getDescription(): string {
     return '';

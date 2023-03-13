@@ -6,6 +6,8 @@ tmp
 /out-tsc
 bin/*
 !bin/.gitkeep
+examples/*
+!examples/.gitkeep
 
 # dependencies
 node_modules

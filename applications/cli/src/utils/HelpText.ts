@@ -22,8 +22,8 @@ export class HelpText {
           commandOrCommandStruct.getDescription(),
         ])
       } else if (commandOrCommandStruct ) {
-        path.push(commandKey);
-        this.formatCommand(commandOrCommandStruct, commandData, path);
+        const newPath = [...path, commandKey];
+        this.formatCommand(commandOrCommandStruct, commandData, newPath);
       }
 
       return commandData;
@@ -47,7 +47,7 @@ ${this.getFooter()}`
     const commands = this.getCommands();
     return commands.reduce((content, command) => {
       const [commandString, commandDescription] = command;
-      const tabs = 4 - Math.floor(commandString.length / 8);
+      const tabs = 6 - Math.floor(commandString.length / 8);
 
       return content + `\t${commandString}${'\t'.repeat(tabs)}${commandDescription}\n`;
     }, '').trimEnd()

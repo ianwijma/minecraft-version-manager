@@ -1,5 +1,5 @@
 import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
-import { Constants, DirNotExistsError, FileExistsError, FileHandler, MvmPackage } from "@mvm/common";
+import { Constants, DirNotFoundError, FileFoundError, MvmPackageIO } from "@mvm/common";
 import * as process from "process";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -15,29 +15,11 @@ export class InitCommand extends AbstractCommand<InitCommandArguments> {
 
     await fs.ensureDir(targetDir);
 
-    if (!await fs.exists(targetDir)) {
-      throw new DirNotExistsError(targetDir)
-    }
+    await DirNotFoundError.validate(targetDir);
+    await FileFoundError.validate(targetPath);
 
-    if (await fs.exists(targetPath)) {
-      throw new FileExistsError(targetPath);
-    }
-
-    const mvmPackage = new MvmPackage(targetPath, {
-      name: path.basename(targetDir),
-      version: '0.0.1',
-      stability: 'release',
-      minecraftVersion: Constants.LATEST_MINECRAFT_VERSION,
-      modLoader: 'vanilla',
-      modLoaderVersion: Constants.LATEST_MINECRAFT_VERSION,
-      modProvider: 'direct',
-      mods: {},
-      clientMods: {},
-      serverMods: {},
-      files: [],
-    });
-
-    await FileHandler.toJson(targetPath, mvmPackage);
+    const mvmPackageIO = MvmPackageIO.CreateNew(targetPath);
+    await mvmPackageIO.write();
 
     console.log(`${targetPath} created`);
   }

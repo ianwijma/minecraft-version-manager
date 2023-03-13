@@ -3,6 +3,7 @@ import { InitCommand } from "../commands/InitCommand";
 import { ModAddCommand } from "../commands/ModAddCommand";
 import { AbstractCommand } from "../commands/AbstractCommand";
 import { HelpCommand } from "../commands/HelpCommand";
+import { FileAddCommand } from "../commands/FileAddCommand";
 
 export const COMMAND_ROOT = '_'
 
@@ -17,6 +18,9 @@ export class CommandManager {
     init: new InitCommand(),
     mod: {
       add: new ModAddCommand()
+    },
+    file: {
+      add: new FileAddCommand()
     }
   }
 

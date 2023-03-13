@@ -1,5 +1,3 @@
-import { basename, dirname } from "path";
-import * as path from "path";
 import { ToJson } from "./FileHandler";
 
 export type StabilityRelease = 'release';
@@ -20,8 +18,14 @@ export type ModProviderCurseForge = 'curse-forge';
 export type ModProviderModrinth = 'modrinth';
 export type ModProviders = ModProviderDirect | ModProviderGithub | ModProviderGithubBuild | ModProviderCurseForge | ModProviderModrinth;
 
+export type ModListVersion = string;
+export interface ModListItem {
+  version: ModListVersion,
+  provider: ModProviders
+}
+
 export interface ModList {
-  [key: string]: string
+  [key: string]: ModListVersion | ModListItem
 }
 
 export interface FilesObject {
@@ -45,8 +49,6 @@ export interface MvmPackageContent {
 }
 
 export class MvmPackage implements Required<MvmPackageContent>, ToJson{
-  private readonly __dir: string
-  private readonly __file: string
   name: string;
   version: string
   stability: Stabilities
@@ -75,21 +77,7 @@ export class MvmPackage implements Required<MvmPackageContent>, ToJson{
     this.files[from] = to;
   }
 
-  getDir(): string {
-    return this.__dir
-  }
-
-  getFile(): string {
-    return this.__dir
-  }
-
-  getPath(): string {
-    return path.join(this.__dir, this.__file);
-  }
-
-  constructor(packagePath: string|null = null, packageContent: MvmPackageContent = {}) {
-    this.__dir = packagePath ? dirname(packagePath) : '';
-    this.__file = packagePath ? basename(packagePath) : '';
+  constructor(packageContent: MvmPackageContent = {}) {
     this.fromContent(packageContent);
   }
 
@@ -121,5 +109,9 @@ export class MvmPackage implements Required<MvmPackageContent>, ToJson{
       modProvider: this.modProvider,
       files: this.files,
     }
+  }
+
+  clone() {
+    return new MvmPackage(this.toJson());
   }
 }
