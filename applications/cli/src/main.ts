@@ -8,8 +8,12 @@ async function Main(): Promise<void> {
   const [command, restPath] = CommandManager.getCommand(commandPath as string[]);
 
   if (command) {
-    command.handle({ ...argv, _: restPath });
+    await command.initialize();
+    await command.handle({ ...argv, _: restPath });
   }
 }
 
-Main().catch(console.error);
+Main().catch(err => {
+  console.error(err);
+  process.exit(1);
+})

@@ -23,10 +23,24 @@ export class MvmPackageIO {
     this.mvmPackageHash = fs.existsSync(packagePath) ? FileHandler.getFileHashSync(packagePath) : '';
   }
 
-  static async CreateFromPath(path: string): Promise<MvmPackageIO> {
-    const mvmPackageContent = await FileHandler.fromJson<MvmPackageContent>(path);
+  static async CreateFromPath(filePath: string): Promise<MvmPackageIO> {
+    const mvmPackageContent = await FileHandler.fromJson<MvmPackageContent>(filePath);
     const mvmPackage = new MvmPackage(mvmPackageContent);
-    return new MvmPackageIO(path, mvmPackage);
+    return new MvmPackageIO(filePath, mvmPackage);
+  }
+
+  static async CreateFromDir(dirPath: string): Promise<MvmPackageIO> {
+    return this.CreateFromPath(join(dirPath, Constants.PACKAGE_NAME));
+  }
+
+  static async MvmPackageFromPath(filePath: string): Promise<MvmPackage> {
+    const IO = await this.CreateFromPath(filePath);
+    return IO.mvmPackage;
+  }
+
+  static async MvmPackageFromDir(dirPath: string): Promise<MvmPackage> {
+    const IO = await this.CreateFromDir(dirPath);
+    return IO.mvmPackage;
   }
 
   static CreateNew(path: string, overwriteMvmPackageContent: MvmPackageContent = {}): MvmPackageIO{

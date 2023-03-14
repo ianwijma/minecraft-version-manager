@@ -18,14 +18,17 @@ export type ModProviderCurseForge = 'curse-forge';
 export type ModProviderModrinth = 'modrinth';
 export type ModProviders = ModProviderDirect | ModProviderGithub | ModProviderGithubBuild | ModProviderCurseForge | ModProviderModrinth;
 
+export type ModListName = string;
 export type ModListVersion = string;
 export interface ModListItem {
   version: ModListVersion,
   provider: ModProviders
 }
 
+export type ModListValue = ModListVersion | ModListItem;
+
 export interface ModList {
-  [key: string]: ModListVersion | ModListItem
+  [key: ModListName]: ModListValue
 }
 
 export interface FilesObject {
@@ -60,6 +63,14 @@ export class MvmPackage implements Required<MvmPackageContent>, ToJson{
   clientMods: ModList
   serverMods: ModList
   files: Files
+
+  get allModNames(): string[] {
+    return [
+      ...Object.keys(this.mods),
+      ...Object.keys(this.clientMods),
+      ...Object.keys(this.serverMods),
+    ]
+  }
 
   addMod(modName: string, modVersion: string) {
     this.mods[modName] = modVersion;
