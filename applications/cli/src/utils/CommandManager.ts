@@ -5,6 +5,7 @@ import { AbstractCommand } from "../commands/AbstractCommand";
 import { HelpCommand } from "../commands/HelpCommand";
 import { FileAddCommand } from "../commands/FileAddCommand";
 import { ModRemoveCommand } from "../commands/ModRemoveCommand";
+import { FileRemoveCommand } from "../commands/FileRemoveCommand";
 
 export const COMMAND_ROOT = '_'
 
@@ -22,7 +23,8 @@ export class CommandManager {
       remove: new ModRemoveCommand(),
     },
     file: {
-      add: new FileAddCommand()
+      add: new FileAddCommand(),
+      remove: new FileRemoveCommand(),
     }
   }
 

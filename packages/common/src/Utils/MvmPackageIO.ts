@@ -83,7 +83,7 @@ export class MvmPackageIO {
       mods: {},
       clientMods: {},
       serverMods: {},
-      files: [],
+      files: {},
       ...overwriteMvmPackageContent
     });
 

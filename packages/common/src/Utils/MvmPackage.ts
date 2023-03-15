@@ -36,11 +36,9 @@ export interface ModList {
   [key: ModListName]: ModListValue
 }
 
-export interface FilesObject {
+export interface Files {
   [key: string]: string
 }
-export type FilesArray = string[];
-export type Files = FilesObject | FilesArray;
 
 export interface MvmPackageContent {
   name?: string
