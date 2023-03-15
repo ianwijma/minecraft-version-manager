@@ -171,6 +171,7 @@ export class MvmPackageIO {
       const { mods, clientMods, serverMods } = this.mvmPackage;
       const { modProvider: defaultProvider = null } = this.mvmPackage
 
+      this.updateMvmPackageLock({mods: {}});
 
       const updateMods = async (mods: ModList, side: Sides) => {
         for (const modName in mods) {

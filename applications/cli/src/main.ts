@@ -2,8 +2,11 @@ import parser from 'yargs-parser';
 import * as process from 'process';
 import { CommandManager } from './utils/CommandManager'
 
+let isVerbose = false
+
 async function Main(): Promise<void> {
-  const { _: commandPath = [], ...argv } = parser(process.argv.slice(2));
+  const { _: commandPath = [], v, verbose, ...argv } = parser(process.argv.slice(2));
+  isVerbose = v || verbose
 
   const [command, restPath] = CommandManager.getCommand(commandPath as string[]);
 
@@ -14,6 +17,6 @@ async function Main(): Promise<void> {
 }
 
 Main().catch(err => {
-  console.trace(err)
+  console.trace(isVerbose ? err : err.message)
   process.exit(1);
 })

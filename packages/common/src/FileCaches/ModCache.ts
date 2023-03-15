@@ -23,6 +23,7 @@ export class ModCache extends AbstractFileCache {
     const fileHash = await FileHandler.getFileHash(fromPath);
     const cachePath = path.join(await this.getModCacheDir(modName, modVersion), fileHash)
 
+    await fs.rm(cachePath); // Cache already exists
     await fs.move(fromPath, cachePath);
     return fileHash;
   }
@@ -34,7 +35,6 @@ export class ModCache extends AbstractFileCache {
 
   static async inCache(modName: ModListName, modVersion: ModListVersion, fileHash: string): Promise<boolean> {
     const cachePath = path.join(await this.getModCacheDir(modName, modVersion), fileHash);
-    console.log(cachePath);
     return await fs.exists(cachePath);
   }
 }

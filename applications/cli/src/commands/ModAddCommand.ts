@@ -1,11 +1,11 @@
 import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
-import { InArrayError, ModProviders, MvmPackageIO } from "@mvm/common";
+import { InArrayError, ModProviders, MvmPackageIO, Sides } from "@mvm/common";
 import process from "process";
 
 export interface AddModCommandArguments extends AbstractCommandArguments {
   version: string,
   provider?: ModProviders,
-  side: 'both' | 'server' | 'client'
+  side: Sides
 }
 
 export class ModAddCommand extends AbstractCommand<AddModCommandArguments> {
@@ -58,6 +58,6 @@ export class ModAddCommand extends AbstractCommand<AddModCommandArguments> {
   }
 
   getArguments(): string {
-    return '<mod-name> [--version=string] [--provider=direct|github|github-build|curse-forge|modrinth]';
+    return '<mod-name> [--version=string] [--provider=direct|github|github-build|curse-forge|modrinth] [--side=both|client|server]';
   }
 }

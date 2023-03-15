@@ -11,6 +11,7 @@ export * from './Errors/DirFoundError';
 export * from './Errors/DirNotFoundError';
 export * from './Errors/FileHashMissmatchError';
 export * from './Errors/InArrayError';
+export * from './Errors/NotInArrayError';
 export * from './Providers/AbstractProvider';
 export * from './Providers/DirectProvider';
 export * from './Providers/ModrinthProvider';
