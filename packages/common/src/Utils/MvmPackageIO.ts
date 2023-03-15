@@ -109,7 +109,7 @@ export class MvmPackageIO {
 
   async updatePackage(updatedMvmPackageContent: MvmPackageContent) {
     const actualHash = await FileHandler.getFileHash(this.mvmPackagePath);
-    FileHashMissMatchError.validate(this.mvmPackageHash, actualHash);
+    FileHashMissMatchError.validate(this.mvmPackagePath, this.mvmPackageHash, actualHash);
 
     this.updateMvmPackage(updatedMvmPackageContent);
     await this.savePackage();
@@ -158,11 +158,11 @@ export class MvmPackageIO {
   }
 
   async updateWithLockfile(updatedMvmPackageContent: MvmPackageContent): Promise<void> {
-    const packageHash = await FileHandler.getFileHash(this.mvmPackageHash);
-    FileHashMissMatchError.validate(this.mvmPackageHash, packageHash);
+    const packageHash = await FileHandler.getFileHash(this.mvmPackagePath);
+    FileHashMissMatchError.validate(this.mvmPackagePath, this.mvmPackageHash, packageHash);
 
-    const packageLockHash = await FileHandler.getFileHash(this.mvmPackageLockHash);
-    FileHashMissMatchError.validate(this.mvmPackageLockHash, packageLockHash);
+    const packageLockHash = await FileHandler.getFileHash(this.mvmPackageLockPath);
+    FileHashMissMatchError.validate(this.mvmPackageLockPath, this.mvmPackageLockHash, packageLockHash);
 
     try {
       this.updateMvmPackage(updatedMvmPackageContent);
@@ -187,7 +187,6 @@ export class MvmPackageIO {
           if (!inCache) {
             const modProvider = this.getProvider(modProviderName);
             const downloadPath = await modProvider.downloadOne(modName, modValue);
-
             fileHash = await ModCache.toCache(modName, cacheVersion, downloadPath);
           }
 

@@ -6,5 +6,6 @@ export const Constants = {
   LATEST_MINECRAFT_VERSION: '1.19.4',
   CACHE_DIR: 'minecraft-version-manager',
   LOCK_VERSION: 1,
-  UNKNOWN_FILE_HASH: 'unknown-file-hash'
+  UNKNOWN_FILE_HASH: 'unknown-file-hash',
+  DEFAULT_HASH_TYPE: 'sha512',
 }
