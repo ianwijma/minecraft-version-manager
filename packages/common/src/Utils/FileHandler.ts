@@ -2,8 +2,8 @@ import * as fs from "fs-extra";
 import * as crypto from "crypto";
 import { FileNotFoundError } from "../Errors/FileNotFoundError";
 
-export interface ToJson {
-  toJson: Function
+export interface ToJson<T> {
+  toJson: () => T
 }
 
 export class FileHandler {
@@ -25,7 +25,7 @@ export class FileHandler {
 
   static getFileHashSync(path: string): string {
     const content = fs.readFileSync(path);
-    const hashSum = crypto.createHash('sha256');
+    const hashSum = crypto.createHash('sha512');
     hashSum.update(content);
     return hashSum.digest('hex');
   }

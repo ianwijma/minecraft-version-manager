@@ -1,5 +1,10 @@
 import { ToJson } from "./FileHandler";
 
+export type SideBoth = 'both';
+export type SideClient = 'client';
+export type SideServer = 'server';
+export type Sides = SideBoth | SideClient | SideServer;
+
 export type StabilityRelease = 'release';
 export type StabilityBeta = 'beta';
 export type StabilityAlpha = 'alpha';
@@ -25,7 +30,7 @@ export interface ModListItem {
   provider: ModProviders
 }
 
-export type ModListValue = ModListVersion | ModListItem;
+export type ModListValue = ModListItem;
 
 export interface ModList {
   [key: ModListName]: ModListValue
@@ -51,7 +56,7 @@ export interface MvmPackageContent {
   files?: Files
 }
 
-export class MvmPackage implements Required<MvmPackageContent>, ToJson{
+export class MvmPackage implements Required<MvmPackageContent>, ToJson<Required<MvmPackageContent>>{
   name: string;
   version: string
   stability: Stabilities
@@ -72,20 +77,12 @@ export class MvmPackage implements Required<MvmPackageContent>, ToJson{
     ]
   }
 
-  addMod(modName: string, modVersion: string) {
-    this.mods[modName] = modVersion;
-  }
-
-  addClientMod(modName: string, modVersion: string) {
-    this.clientMods[modName] = modVersion;
-  }
-
-  addServerMod(modName: string, modVersion: string) {
-    this.serverMods[modName] = modVersion;
-  }
-
-  addFile(from: string, to: string) {
-    this.files[from] = to;
+  get allMods(): ModList {
+    return {
+      ...this.mods,
+      ...this.clientMods,
+      ...this.serverMods,
+    }
   }
 
   constructor(packageContent: MvmPackageContent = {}) {
@@ -106,7 +103,7 @@ export class MvmPackage implements Required<MvmPackageContent>, ToJson{
     this.files = packageContent.files
   }
 
-  public toJson(): MvmPackageContent {
+  public toJson() {
     return {
       name: this.name,
       stability: this.stability,

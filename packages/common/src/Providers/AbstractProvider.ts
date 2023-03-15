@@ -1,19 +1,15 @@
 import { AbstractDownloader } from "../ProviderDownloaders/AbstractDownloader";
-import { ModList, ModListName, ModListValue, ModListVersion } from "@mvm/common";
+import { ModList, ModListName, ModListValue } from "@mvm/common";
 
 export interface ModListDownloads {
   [key: ModListName]: string
 }
 
 export abstract class AbstractProvider {
-  abstract getDownloader(modName: ModListName, modVersion: ModListVersion): AbstractDownloader;
+  abstract getDownloader(modName: ModListName, modValue: ModListValue): AbstractDownloader;
 
-  async downloadOne(modName: ModListName, modVersion: ModListValue): Promise<string> {
-    if (typeof modVersion === 'object') {
-      modVersion = modVersion.version;
-    }
-
-    const downloader = this.getDownloader(modName, modVersion);
+  async downloadOne(modName: ModListName, modValue: ModListValue): Promise<string> {
+    const downloader = this.getDownloader(modName, modValue);
     return await downloader.download();
   }
 

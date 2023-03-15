@@ -3,6 +3,7 @@ export * from './Utils/PackageJson';
 export * from './Utils/Constants';
 export * from './Utils/FileHandler';
 export * from './Utils/MvmPackage';
+export * from './Utils/MvmPackageLock';
 export * from './Utils/MvmPackageIO';
 export * from './Errors/FileFoundError';
 export * from './Errors/FileNotFoundError';

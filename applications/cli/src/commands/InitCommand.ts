@@ -7,21 +7,27 @@ import * as path from "path";
 export interface InitCommandArguments extends AbstractCommandArguments {}
 
 export class InitCommand extends AbstractCommand<InitCommandArguments> {
+
+  async initialize(): Promise<void> {
+    // handle will do the initializing!~
+  }
+
   async handle(argv: InitCommandArguments) {
     const { _: [ target = process.cwd() ] } = argv;
 
     const targetDir = path.resolve(target);
-    const targetPath = path.join(targetDir, Constants.PACKAGE_NAME);
 
     await fs.ensureDir(targetDir);
 
     await DirNotFoundError.validate(targetDir);
-    await FileFoundError.validate(targetPath);
+    await FileFoundError.validate(path.join(targetDir, Constants.PACKAGE_FILE_NAME));
+    await FileFoundError.validate(path.join(targetDir, Constants.LOCK_FILE_NAME));
 
-    const mvmPackageIO = MvmPackageIO.CreateNew(targetPath);
-    await mvmPackageIO.write();
+    const mvmPackageIO = MvmPackageIO.CreateNew(targetDir);
+    await mvmPackageIO.writePackage();
+    await mvmPackageIO.writePackageLock();
 
-    console.log(`${targetPath} created`);
+    console.log(`${targetDir} created`);
   }
 
   getDescription(): string {
