@@ -1,8 +1,8 @@
 import {
   AbstractProvider,
-  Constants, DirectProvider,
+  Constants, CurseForgeProvider, DirectProvider,
   FileHandler,
-  FileHashMissMatchError, ModList, ModProviders,
+  FileHashMissMatchError, GithubBuildProvider, GithubProvider, ModList, ModListVersion, ModProviders, ModrinthProvider,
   MvmPackage,
   MvmPackageContent,
   MvmPackageLock, MvmPackageLockContent, Sides
@@ -181,7 +181,7 @@ export class MvmPackageIO {
           const provider = modValue.provider;
 
           const modProviderName = provider ?? defaultProvider;
-          const cacheVersion = modProviderName === 'direct' ? 'latest' : version;
+          const cacheVersion = this.getProviderBasedVersion(modProviderName, version);
 
           let fileHash = this.mvmPackageLock.getModHash(modName) ?? Constants.UNKNOWN_FILE_HASH;
           const inCache = await ModCache.inCache(modName, cacheVersion, fileHash);
@@ -232,13 +232,29 @@ export class MvmPackageIO {
       case "direct":
         return new DirectProvider()
       case "github":
-        return new DirectProvider()
+        return new GithubProvider()
       case "github-build":
-        return new DirectProvider()
+        return new GithubBuildProvider()
       case "curse-forge":
-        return new DirectProvider()
+        return new CurseForgeProvider()
       case "modrinth":
-        return new DirectProvider()
+        return new ModrinthProvider()
+    }
+  }
+
+  private getProviderBasedVersion(provider: ModProviders, version: ModListVersion) {
+    switch (provider) {
+      case "direct":
+        return 'latest'
+      case "github":
+        const [_, tag = 'latest'] = version.split('#')
+        return tag;
+      case "github-build":
+        return version; // TODO: Fix
+      case "curse-forge":
+        return version; // TODO: Fix
+      case "modrinth":
+        return version; // TODO: Fix
     }
   }
 }

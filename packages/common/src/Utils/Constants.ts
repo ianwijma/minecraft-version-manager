@@ -8,4 +8,5 @@ export const Constants = {
   LOCK_VERSION: 1,
   UNKNOWN_FILE_HASH: 'unknown-file-hash',
   DEFAULT_HASH_TYPE: 'sha512',
+  GITHUB_API_VERSION: '2022-11-28',
 }

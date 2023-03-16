@@ -25,12 +25,10 @@ export type ModProviders = ModProviderDirect | ModProviderGithub | ModProviderGi
 
 export type ModListName = string;
 export type ModListVersion = string;
-export interface ModListItem {
+export interface ModListValue {
   version: ModListVersion,
   provider: ModProviders
 }
-
-export type ModListValue = ModListItem;
 
 export interface ModList {
   [key: ModListName]: ModListValue
