@@ -5,6 +5,7 @@ import { AbstractDownloader } from "../ProviderDownloaders/AbstractDownloader";
 
 export class ModrinthProvider extends AbstractProvider {
   getDownloader(modName: ModListName, modValue: ModListValue): AbstractDownloader {
-    return new ModrinthDownloader();
+    const { version } = modValue;
+    return new ModrinthDownloader(modName, version);
   }
 }
