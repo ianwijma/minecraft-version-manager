@@ -9,4 +9,5 @@ export const Constants = {
   UNKNOWN_FILE_HASH: 'unknown-file-hash',
   DEFAULT_HASH_TYPE: 'sha512',
   GITHUB_API_VERSION: '2022-11-28',
+  MODRINTH_API_BASEURL: 'https://api.modrinth.com/v2',
 }
