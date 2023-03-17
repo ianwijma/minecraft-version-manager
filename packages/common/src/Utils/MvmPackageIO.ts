@@ -250,11 +250,11 @@ export class MvmPackageIO {
         const [_, tag = 'latest'] = version.split('#')
         return tag;
       case "github-build":
-        return version; // TODO: Fix
+        return 'latest'; // TODO: Fix
       case "curse-forge":
         return version; // TODO: Fix
       case "modrinth":
-        return version; // TODO: Fix
+        return version;
     }
   }
 }

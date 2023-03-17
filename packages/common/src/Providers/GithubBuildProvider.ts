@@ -5,6 +5,11 @@ import { GithubBuilderDownloader } from "../ProviderDownloaders/GithubBuilderDow
 
 export class GithubBuildProvider extends AbstractProvider {
   getDownloader(modName: ModListName, modValue: ModListValue): AbstractDownloader {
-    return new GithubBuilderDownloader();
+    const { version } = modValue; // version format -> <owner>/<repo>:fileName~"command"
+    const [ownerRepoBuildDir, command = './gradlew build'] = version.split('~');
+    const [ownerRepo, buildDir] = ownerRepoBuildDir.split(':');
+    const [owner, repo] = ownerRepo.split('/');
+
+    return new GithubBuilderDownloader(owner, repo, command, buildDir);
   }
 }
