@@ -20,7 +20,7 @@ Visit the [Nx Documentation](https://nx.dev) to learn more.
 
 Good examples on how to compile for a platform: https://github.com/GTNewHorizons/DreamAssemblerXXL
 
-## Mvm Commands
+## Mvm Command changes
 
 This is our idea way of adding new mods. This is not the current way though
 
@@ -51,3 +51,7 @@ mvm mod add ghr://<mod-name>/<owner>/<repo>/<file>[#<release-tag=latest>] [--sid
 ```shell
 mvm mod add m://<mod-name>/<mod-version> [--side=<both|client|server>]
 ```
+
+## MVM Package changes
+
+- Instead of having mods, clientMods and serverMods. lets just have mods, where in the object we have some sub information.
