@@ -24,9 +24,9 @@ Good examples on how to compile for a platform: https://github.com/GTNewHorizons
 
 This is our idea way of adding new mods. This is not the current way though
 
-### Add direct
+### Add direct download
 ```shell 
-mvm mod add d://<mod-name>/https://example.com/example-mod.jar [--side=<both|client|server>]
+mvm mod add dd://<mod-name>/https://example.com/example-mod.jar [--side=<both|client|server>]
 ```
 
 ### Add curse forge
@@ -40,10 +40,10 @@ mvm mod add cf://<mod-name>/<mod-version> [--side=<both|client|server>]
 mvm mod add ghb://<mod-name>/<owner>/<repo>/<build-command> [--side=<both|client|server>]
 ```
 
-### Add GitHub
+### Add GitHub Release
 
 ```shell
-mvm mod add gh://<mod-name>/<owner>/<repo>/<file>[#<release-tag=latest>] [--side=<both|client|server>]
+mvm mod add ghr://<mod-name>/<owner>/<repo>/<file>[#<release-tag=latest>] [--side=<both|client|server>]
 ```
 
 ### Add modrinth
