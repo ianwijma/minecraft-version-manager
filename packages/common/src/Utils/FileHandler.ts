@@ -4,6 +4,7 @@ import { FileNotFoundError } from "../Errors/FileNotFoundError";
 import { Constants } from "./Constants";
 import { relative } from 'path';
 import * as process from "process";
+import { Crypto } from "./Crypto";
 
 export interface ToJson<T> {
   toJson: () => T
@@ -17,7 +18,7 @@ export class FileHandler {
 
     return relative(process.cwd(), path);
   }
-  static async fromJson<T extends object>(path: string): Promise<T> {
+  static async fromJson<T extends object = {}>(path: string): Promise<T> {
     await FileNotFoundError.validate(path);
     return fs.readJSON(path);
   }
@@ -35,8 +36,6 @@ export class FileHandler {
 
   static getFileHashSync(path: string): string {
     const content = fs.readFileSync(path);
-    const hashSum = crypto.createHash(Constants.DEFAULT_HASH_TYPE);
-    hashSum.update(content);
-    return hashSum.digest('hex');
+    return Crypto.createHash(content);
   }
 }

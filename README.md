@@ -22,34 +22,41 @@ Good examples on how to compile for a platform: https://github.com/GTNewHorizons
 
 ## Mvm Command changes
 
-This is our idea way of adding new mods. This is not the current way though
+This is our idea way of adding new mods. This is not the current way though.
+
+
+### General adding of mods 
+
+```shell
+mvm mod add <provider> <mod-name> [...provider dependent arguments] 
+```
 
 ### Add direct download
 ```shell 
-mvm mod add dd://<mod-name>/https://example.com/example-mod.jar [--side=<both|client|server>]
+mvm mod add direct-download/dd <mod-name> <download-url> [--side=<both|client|server>]
 ```
 
 ### Add curse forge
 ```shell
-mvm mod add cf://<mod-name>/<mod-version> [--side=<both|client|server>]
-```
-
-### Add GitHub Build
-
-```shell
-mvm mod add ghb://<mod-name>/<owner>/<repo>/<build-command> [--side=<both|client|server>]
+mvm mod add curse-forge/cf <mod-name> [mod-version=latest] [--side=<both|client|server>]
 ```
 
 ### Add GitHub Release
 
 ```shell
-mvm mod add ghr://<mod-name>/<owner>/<repo>/<file>[#<release-tag=latest>] [--side=<both|client|server>]
+mvm mod add github-release/ghr <mod-name> <owner> <repo> [file=non-repo-source] [release-tag=latest] [--side=<both|client|server>]
+```
+
+### Add GitHub Build
+
+```shell
+mvm mod add github-build/ghb <mod-name> <owner> <repo> <build-command> [--side=<both|client|server>]
 ```
 
 ### Add modrinth
 
 ```shell
-mvm mod add m://<mod-name>/<mod-version> [--side=<both|client|server>]
+mvm mod add modrinth/m <mod-name> <mod-version> [--side=<both|client|server>]
 ```
 
 ## MVM Package changes

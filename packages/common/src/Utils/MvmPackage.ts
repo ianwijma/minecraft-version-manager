@@ -1,37 +1,74 @@
 import { ToJson } from "./FileHandler";
+import { Constants } from "./Constants";
 
-export type SideBoth = 'both';
-export type SideClient = 'client';
-export type SideServer = 'server';
-export type Sides = SideBoth | SideClient | SideServer;
-
-export type StabilityRelease = 'release';
-export type StabilityBeta = 'beta';
-export type StabilityAlpha = 'alpha';
-export type Stabilities = StabilityRelease | StabilityBeta | StabilityAlpha;
-
-export type ModLoaderVanilla = 'vanilla';
-export type ModLoaderForge = 'forge';
-export type ModLoaderFabric = 'fabric';
-export type ModLoaderQuilt = 'quilt';
-export type ModLoaders = ModLoaderVanilla | ModLoaderForge | ModLoaderFabric | ModLoaderQuilt;
-
-export type ModProviderDirect = 'direct';
-export type ModProviderGithub = 'github';
-export type ModProviderGithubBuild = 'github-build';
-export type ModProviderCurseForge = 'curse-forge';
-export type ModProviderModrinth = 'modrinth';
-export type ModProviders = ModProviderDirect | ModProviderGithub | ModProviderGithubBuild | ModProviderCurseForge | ModProviderModrinth;
-
-export type ModListName = string;
-export type ModListVersion = string;
-export interface ModListValue {
-  version: ModListVersion,
-  provider: ModProviders
+export enum Sides {
+  BOTH = 'both',
+  CLIENT = 'both',
+  SERVER = 'both',
 }
 
-export interface ModList {
-  [key: ModListName]: ModListValue
+export enum Stabilities {
+  RELEASE = 'release',
+  BETA = 'beta',
+  ALPHA = 'alpha',
+}
+
+export enum ModLoaders {
+  VANILLA = 'vanilla',
+  FORGE = 'forge',
+  FABRIC = 'fabric',
+  QUILT = 'quilt',
+}
+
+export enum ModProviders {
+  DIRECT_DOWNLOAD = 'direct-download',
+  GITHUB_RELEASE = 'github-release',
+  GITHUB_BUILD = 'github-build',
+  CURSE_FORGE = 'curse-forge',
+  MODRINTH = 'modrinth',
+}
+
+export type ModName = string;
+export type ModVersion = string;
+export type ModFileHash = string;
+
+export interface BaseModDetail {
+  provider: ModProviders
+  version: ModVersion
+  side: Sides
+  hash: ModFileHash
+}
+
+export interface DirectDownloadModDetail extends BaseModDetail {
+  provider: ModProviders.DIRECT_DOWNLOAD,
+  downloadUrl: string
+}
+
+export interface CurseForgeModDetail extends BaseModDetail {
+  provider: ModProviders.CURSE_FORGE
+}
+export interface ModrinthModDetail extends BaseModDetail {
+  provider: ModProviders.MODRINTH
+}
+export interface GithubReleaseModDetail extends BaseModDetail {
+  provider: ModProviders.GITHUB_RELEASE
+  owner: string
+  repo: string
+  tag?: string
+  file?: string
+}
+
+export interface GithubBuildModDetail extends BaseModDetail {
+  provider: ModProviders.GITHUB_BUILD
+  owner: string
+  repo: string
+  command: string
+}
+
+export type ModDetails = DirectDownloadModDetail | CurseForgeModDetail | ModrinthModDetail | GithubReleaseModDetail | GithubBuildModDetail
+
+export interface ModDetailMap<T extends BaseModDetail = ModDetails> {
+  [key: ModName]: T
 }
 
 export interface Files {
@@ -39,6 +76,7 @@ export interface Files {
 }
 
 export interface MvmPackageContent {
+  _package_version?: number
   name?: string
   version?: string
   stability?: Stabilities
@@ -46,13 +84,12 @@ export interface MvmPackageContent {
   modLoader?: ModLoaders
   modLoaderVersion?: string
   modProvider?: ModProviders
-  mods?: ModList
-  clientMods?: ModList
-  serverMods?: ModList
+  mods?: ModDetailMap
   files?: Files
 }
 
 export class MvmPackage implements Required<MvmPackageContent>, ToJson<Required<MvmPackageContent>>{
+  _package_version: number;
   name: string;
   version: string
   stability: Stabilities
@@ -60,32 +97,15 @@ export class MvmPackage implements Required<MvmPackageContent>, ToJson<Required<
   modLoader: ModLoaders
   modLoaderVersion: string
   modProvider: ModProviders
-  mods: ModList
-  clientMods: ModList
-  serverMods: ModList
+  mods: ModDetailMap
   files: Files
-
-  get allModNames(): string[] {
-    return [
-      ...Object.keys(this.mods),
-      ...Object.keys(this.clientMods),
-      ...Object.keys(this.serverMods),
-    ]
-  }
-
-  get allMods(): ModList {
-    return {
-      ...this.mods,
-      ...this.clientMods,
-      ...this.serverMods,
-    }
-  }
 
   constructor(packageContent: MvmPackageContent = {}) {
     this.fromContent(packageContent);
   }
 
   private fromContent(packageContent: MvmPackageContent = {}) {
+    this._package_version = packageContent._package_version
     this.name = packageContent.name
     this.stability = packageContent.stability as Stabilities
     this.version = packageContent.version;
@@ -93,29 +113,30 @@ export class MvmPackage implements Required<MvmPackageContent>, ToJson<Required<
     this.modLoader = packageContent.modLoader as ModLoaders
     this.modLoaderVersion = packageContent.modLoaderVersion
     this.mods = packageContent.mods
-    this.clientMods = packageContent.clientMods
-    this.serverMods = packageContent.serverMods
     this.modProvider = packageContent.modProvider as ModProviders
     this.files = packageContent.files
   }
 
   public toJson() {
     return {
+      _package_version: this._package_version,
       name: this.name,
       stability: this.stability,
       version: this.version,
       minecraftVersion: this.minecraftVersion,
       modLoader: this.modLoader,
       modLoaderVersion: this.modLoaderVersion,
-      mods: this.mods,
-      serverMods: this.serverMods,
-      clientMods: this.clientMods,
       modProvider: this.modProvider,
+      mods: this.mods,
       files: this.files,
     }
   }
 
   clone() {
     return new MvmPackage(this.toJson());
+  }
+
+  getModHash(modName: ModName): ModFileHash {
+    return this?.mods[modName]?.hash ?? Constants.UNKNOWN_FILE_HASH;
   }
 }

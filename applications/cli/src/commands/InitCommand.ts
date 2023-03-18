@@ -1,5 +1,5 @@
 import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
-import { Constants, DirNotFoundError, FileFoundError, MvmPackageIO } from "@mvm/common";
+import { Constants, DirNotFoundError, FileFoundError, MvmPackageHandler } from "@mvm/common";
 import * as process from "process";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -21,11 +21,9 @@ export class InitCommand extends AbstractCommand<InitCommandArguments> {
 
     await DirNotFoundError.validate(targetDir);
     await FileFoundError.validate(path.join(targetDir, Constants.PACKAGE_FILE_NAME));
-    await FileFoundError.validate(path.join(targetDir, Constants.LOCK_FILE_NAME));
 
-    const mvmPackageIO = MvmPackageIO.CreateNew(targetDir);
-    await mvmPackageIO.writePackage();
-    await mvmPackageIO.writePackageLock();
+    const mvmPackageIO = MvmPackageHandler.CreateNew(targetDir);
+    await mvmPackageIO.initialize();
 
     console.log(`${targetDir} created`);
   }

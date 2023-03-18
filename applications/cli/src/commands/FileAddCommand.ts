@@ -1,6 +1,5 @@
 import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
-import process from "process";
-import { FileHandler, FileNotFoundError, InArrayError, MvmPackageIO } from "@mvm/common";
+import { FileHandler, FileNotFoundError, InArrayError } from "@mvm/common";
 
 export interface FileAddCommandArguments extends AbstractCommandArguments {}
 
@@ -10,8 +9,7 @@ export class FileAddCommand extends AbstractCommand<FileAddCommandArguments> {
     const fromPath = FileHandler.normalizePath(from);
     const toPath = FileHandler.normalizePath(to);
 
-    const mvmPackageIO = await MvmPackageIO.CreateFromDir(process.cwd());
-    const { files } = mvmPackageIO.mvmPackage;
+    const { files } = this.mvmPackageHandler.mvmPackage;
 
     InArrayError.validate(Object.keys(files), fromPath);
     await FileNotFoundError.validate(fromPath);
@@ -21,9 +19,9 @@ export class FileAddCommand extends AbstractCommand<FileAddCommandArguments> {
 
 
     files[fromPath] = toPath;
-    await mvmPackageIO.updatePackage({
-      files: files,
-    });
+    await this.mvmPackageHandler
+      .update({ files })
+      .save();
 
     console.log(`File "${fromPath}" has been added.`);
   }

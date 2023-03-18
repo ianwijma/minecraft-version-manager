@@ -1,13 +1,14 @@
 import { ValidatableError } from "./ValidatableError";
-import { staticImplements } from "@mvm/common";
+import { FileHandler, staticImplements } from "@mvm/common";
 
 @staticImplements<ValidatableError>()
 export class FileHashMissMatchError extends Error {
-  constructor(path, expected, actual) {
+  constructor(path: string, expected: string, actual: string) {
     super(`File "${path}" hash miss match, expected "${expected}" but got "${actual}"`);
   }
 
-  static validate(path, expected, actual): void {
+  static validate(path: string, expected: string): void {
+    const actual = FileHandler.getFileHashSync(path);
     if (expected !== actual) {
       throw new this(path, expected, actual);
     }

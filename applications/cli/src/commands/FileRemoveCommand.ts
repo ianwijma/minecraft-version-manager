@@ -1,6 +1,5 @@
 import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
-import process from "process";
-import { FileHandler, MvmPackageIO, NotInArrayError } from "@mvm/common";
+import { FileHandler, NotInArrayError } from "@mvm/common";
 
 export interface FileRemoveCommandArguments extends AbstractCommandArguments {}
 
@@ -9,15 +8,14 @@ export class FileRemoveCommand extends AbstractCommand<FileRemoveCommandArgument
     const { _: [ from ] } = argv;
     const fromPath = FileHandler.normalizePath(from);
 
-    const mvmPackageIO = await MvmPackageIO.CreateFromDir(process.cwd());
-    const { files } = mvmPackageIO.mvmPackage;
+    const { files } = this.mvmPackageHandler.mvmPackage;
 
     NotInArrayError.validate(Object.keys(files), fromPath);
 
     delete files[fromPath];
-    await mvmPackageIO.updatePackage({
-      files: files,
-    });
+    await this.mvmPackageHandler
+      .update({ files })
+      .save();
 
     console.log(`File "${fromPath}" was removed.`);
   }

@@ -1,13 +1,13 @@
 import { AbstractDownloader } from "./AbstractDownloader";
-import { ModListName, ModListVersion, MvmPackageIO, Stabilities } from "@mvm/common";
+import { ModName, ModVersion, MvmPackageHandler, Stabilities } from "@mvm/common";
 import axios, { AxiosInstance } from "axios";
 import * as process from "process";
 
 export class ModrinthDownloader extends AbstractDownloader {
-  modName: ModListName
-  version: ModListVersion
+  modName: ModName
+  version: ModVersion
 
-  constructor(modName: ModListName, version: ModListVersion) {
+  constructor(modName: ModName, version: ModVersion) {
     super();
     this.modName = modName;
     this.version = version;
@@ -21,7 +21,8 @@ export class ModrinthDownloader extends AbstractDownloader {
 
   async getModrinthDownloadUrl(): Promise<string> {
     const { data: versions } = await this.getWrapper().get(`project/${this.modName}/version`);
-    const { modLoader, minecraftVersion, stability } = await MvmPackageIO.MvmPackageFromDir(process.cwd());
+    const mvmPackageHandler = await MvmPackageHandler.CreateFromProjectDir(process.cwd());
+    const { modLoader, minecraftVersion, stability } = mvmPackageHandler.mvmPackage
 
     const [ version ] = versions.filter(({ version_number, game_versions, loaders, version_type }) => {
       const [ gameVersion ] = game_versions;

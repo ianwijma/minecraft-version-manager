@@ -1,4 +1,4 @@
-import { MvmPackage, MvmPackageIO } from "@mvm/common";
+import { MvmPackageHandler } from "@mvm/common";
 import process from "process";
 
 export interface AbstractCommandArguments {
@@ -6,10 +6,10 @@ export interface AbstractCommandArguments {
 }
 
 export abstract class AbstractCommand<Arguments extends AbstractCommandArguments = AbstractCommandArguments> {
-  protected mvmPackage: MvmPackage;
+  protected mvmPackageHandler: MvmPackageHandler;
 
   async initialize(): Promise<void> {
-    this.mvmPackage = await MvmPackageIO.MvmPackageFromDir(process.cwd())
+    this.mvmPackageHandler = await MvmPackageHandler.CreateFromProjectDir(process.cwd());
   }
 
   abstract handle(argv: Arguments): Promise<void>|void;
