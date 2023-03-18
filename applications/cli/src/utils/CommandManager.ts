@@ -1,11 +1,16 @@
 import { MvmCommand } from "../commands/MvmCommand";
 import { InitCommand } from "../commands/InitCommand";
-import { ModAddCommand } from "../commands/ModAddCommand";
 import { AbstractCommand } from "../commands/AbstractCommand";
 import { HelpCommand } from "../commands/HelpCommand";
 import { FileAddCommand } from "../commands/FileAddCommand";
 import { ModRemoveCommand } from "../commands/ModRemoveCommand";
 import { FileRemoveCommand } from "../commands/FileRemoveCommand";
+import { ModAddDirectDownloadCommand } from "../commands/ModAddDirectDownloadCommand";
+import { ModAddCurseForgeCommand } from "../commands/ModAddCurseForgeCommand";
+import { ModAddGithubReleaseCommand } from "../commands/ModAddGithubReleaseCommand";
+import { ModAddGithubBuildCommand } from "../commands/ModAddGithubBuildCommand";
+import { ModAddModrinthCommand } from "../commands/ModAddModrinthCommand";
+import { ModAddCommand } from "../commands/ModAddCommand";
 
 export const COMMAND_ROOT = '_'
 
@@ -19,7 +24,14 @@ export class CommandManager {
     help: new HelpCommand(),
     init: new InitCommand(),
     mod: {
-      add: new ModAddCommand(),
+      add: {
+        [COMMAND_ROOT]: new ModAddCommand(),
+        'direct-download': new ModAddDirectDownloadCommand(),
+        'curse-forge': new ModAddCurseForgeCommand(),
+        'github-release': new ModAddGithubReleaseCommand(),
+        'github-build': new ModAddGithubBuildCommand(),
+        'modrinth': new ModAddModrinthCommand(),
+      },
       remove: new ModRemoveCommand(),
     },
     file: {

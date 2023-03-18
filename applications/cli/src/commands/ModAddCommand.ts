@@ -1,63 +1,37 @@
-import { AbstractCommand, AbstractCommandArguments } from "./AbstractCommand";
-import { InArrayError, ModProviders, Sides } from "@mvm/common";
+import { AbstractCommand } from "./AbstractCommand";
+import {
+  ModAddDirectDownloadCommand,
+  ModAddDirectDownloadCommandArguments
+} from "./ModAddDirectDownloadCommand";
+import { ModAddGithubBuildCommand, ModAddGithubBuildCommandArguments } from "./ModAddGithubBuildCommand";
+import { ModAddGithubReleaseCommand, ModAddGithubReleaseCommandArguments } from "./ModAddGithubReleaseCommand";
+import { ModAddModrinthCommand, ModAddModrinthCommandArguments } from "./ModAddModrinthCommand";
+import { ModAddCurseForgeCommand, ModAddCurseForgeCommandArguments } from "./ModAddCurseForgeCommand";
+import { ModProviders } from "@mvm/common";
 
-export interface AddModCommandArguments extends AbstractCommandArguments {
-  version: string,
-  provider?: ModProviders,
-  side: Sides
-}
+export type ModAddCommandArguments = ModAddCurseForgeCommandArguments | ModAddDirectDownloadCommandArguments | ModAddGithubBuildCommandArguments | ModAddGithubReleaseCommandArguments | ModAddModrinthCommandArguments
 
-export class ModAddCommand extends AbstractCommand<AddModCommandArguments> {
-  async handle(argv: AddModCommandArguments) {
-    const { _: [ modName ] } = argv;
-    const { modProvider: defaultProvider = null, } = this.mvmPackageHandler.mvmPackage
-    const { mods } = this.mvmPackageHandler.mvmPackage
-    const { version = 'latest', provider = null, side = 'both' } = argv;
-
-    InArrayError.validate(Object.keys(mods), modName);
-
-    const { mvmPackage } = this.mvmPackageHandler;
-    console.log(mvmPackage);
-
-    // Move to separate class.
-  //   if (side === 'both') {
-  //     await mvmPackageIO.updateWithLockfile({
-  //       mods: {
-  //         [modName]: {
-  //           version: version,
-  //           provider: provider ?? defaultProvider
-  //         },
-  //         ...mvmPackage.mods
-  //       }
-  //     });
-  //   } else if (side === 'client') {
-  //     await mvmPackageIO.updateWithLockfile({
-  //       clientMods: {
-  //         [modName]: {
-  //           version: version,
-  //           provider: provider ?? defaultProvider
-  //         },
-  //         ...mvmPackage.clientMods
-  //       }
-  //     });
-  //   } else if (side === 'server') {
-  //     await mvmPackageIO.updateWithLockfile({
-  //       serverMods: {
-  //         [modName]: {
-  //           version: version,
-  //           provider: provider ?? defaultProvider
-  //         },
-  //         ...mvmPackage.serverMods
-  //       }
-  //     });
-  //   }
+export class ModAddCommand extends AbstractCommand<ModAddCommandArguments> {
+  async handle(argv: ModAddCommandArguments): Promise<void> {
+    const provider = argv._.shift();
+    const command = this.getModAddCommand(provider as ModProviders);
+    await command.initialize();
+    await command.handle(argv);
   }
 
-  getDescription(): string {
-    return 'Adds a mod'
+  getModAddCommand(provider: ModProviders): AbstractCommand {
+    switch (provider) {
+      case ModProviders.DIRECT_DOWNLOAD:
+        return new ModAddDirectDownloadCommand();
+      case ModProviders.CURSE_FORGE:
+        return new ModAddCurseForgeCommand();
+      case ModProviders.GITHUB_BUILD:
+        return new ModAddGithubBuildCommand();
+      case ModProviders.GITHUB_RELEASE:
+        return new ModAddGithubReleaseCommand();
+      case ModProviders.MODRINTH:
+        return new ModAddModrinthCommand();
+    }
   }
 
-  getArguments(): string {
-    return '<mod-name> [--version=string] [--provider=direct|github|github-build|curse-forge|modrinth] [--side=both|client|server]';
-  }
 }
