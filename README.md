@@ -19,3 +19,35 @@ Visit the [Nx Documentation](https://nx.dev) to learn more.
 ## MVM resources
 
 Good examples on how to compile for a platform: https://github.com/GTNewHorizons/DreamAssemblerXXL
+
+## Mvm Commands
+
+This is our idea way of adding new mods. This is not the current way though
+
+### Add direct
+```shell 
+mvm mod add d://<mod-name>/https://example.com/example-mod.jar [--side=<both|client|server>]
+```
+
+### Add curse forge
+```shell
+mvm mod add cf://<mod-name>/<mod-version> [--side=<both|client|server>]
+```
+
+### Add GitHub Build
+
+```shell
+mvm mod add ghb://<mod-name>/<owner>/<repo>/<build-command> [--side=<both|client|server>]
+```
+
+### Add GitHub
+
+```shell
+mvm mod add gh://<mod-name>/<owner>/<repo>/<file>[#<release-tag=latest>] [--side=<both|client|server>]
+```
+
+### Add modrinth
+
+```shell
+mvm mod add m://<mod-name>/<mod-version> [--side=<both|client|server>]
+```

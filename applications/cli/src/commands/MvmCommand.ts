@@ -8,6 +8,11 @@ export interface MvmCommandArguments extends AbstractCommandArguments {
 }
 
 export class MvmCommand extends AbstractCommand<MvmCommandArguments> {
+
+  async initialize(): Promise<void> {
+    // handle will do the initializing!~
+  }
+
   handle(argv: MvmCommandArguments) {
     if (argv.version) {
       console.log(`v${PackageJson.version}`)
