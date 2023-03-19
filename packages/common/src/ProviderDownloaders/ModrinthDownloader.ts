@@ -46,7 +46,6 @@ export class ModrinthDownloader extends AbstractDownloader {
     }
 
     throw new Error(`Unable to find Modrinth project ${this.modName} for version ${this.version}: ${JSON.stringify({ modLoader, minecraftVersion, stability })}}`);
-
   }
 
   private versionMatch(targetStability: Stabilities, stability) {

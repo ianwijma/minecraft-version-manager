@@ -63,6 +63,7 @@ export interface GithubBuildModDetail extends BaseModDetail {
   owner: string
   repo: string
   command: string
+  buildDir?: string
 }
 
 export type ModDetails = DirectDownloadModDetail | CurseForgeModDetail | ModrinthModDetail | GithubReleaseModDetail | GithubBuildModDetail
